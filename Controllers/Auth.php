@@ -5,7 +5,6 @@ if (!defined('BASEPATH')) {
 }
 
 class Auth extends CI_Controller {
-
  public function __construct() {
   parent::__construct();
   $this->load->model('m_auth');
@@ -22,7 +21,6 @@ function login() {
   );
   $input = $this->input->post();
   if (isset($input['btnLogin'])) {
-//     debug($input);
    if (empty($input['username']) || empty($input['password'])) {
     $this->session->set_flashdata('pesan', 'Data tidak boleh kosong !!');
     redirect("auth/login", "refresh");
@@ -37,7 +35,6 @@ function login() {
       'username' => anti_xss($username, TRUE),
       'password'   => anti_xss($password, TRUE),
     );
-//      debug($cek_data);
     if ($cek_data === "0") {
        //password_salah
      $this->session->set_flashdata('pesan', 'Password salah, Ulangi !!');
@@ -45,7 +42,6 @@ function login() {
      $this->m_auth->insert_fail_login($data_fail);
      redirect("auth/login", "refresh");
    } elseif ($cek_data === "NULL") {
-       //no_username/idpeg
      $this->session->set_flashdata('pesan', 'Username belum terdaftar !!');
      $this->session->set_flashdata('class', 'text-danger');
      $this->m_auth->insert_fail_login($data_fail);
@@ -69,15 +65,12 @@ function login() {
        'logout'     => "0",
        'status'     => "1",
      );
-       //debug($data_login);
      $this->db->query("UPDATE tm_user SET logged = '1' WHERE userid ='$cek_data->userid'");
      $this->m_auth->insert_logid($data_login);
      cek_session_login();
    }
  }
 }
-//    $this->session->set_flashdata('pesan', 'Masukkan Username dan Password!');
-//    $this->session->set_flashdata('class', 'text-info');
 $this->load->view('auth/v_login', $data);
 }
 
@@ -89,7 +82,6 @@ function logout() {
     'logout' => $waktu,
     'status' => "0",
   );
-    //debug($data_logout);
   $this->db->query("UPDATE tm_user SET logged = '0' WHERE userid ='$userid'");
   $this->m_auth->update_logid($log_id, $data_logout);
   $this->session->sess_destroy();
